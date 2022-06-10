@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "start": "react-scripts start",
+    "prebuild": "npm run lint",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
