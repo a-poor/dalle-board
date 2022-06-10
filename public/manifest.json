@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DALL-E Board",
+  "name": "DALL-E Board: Creating Storyboards with DALL-E",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,8 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import reportWebVitals from './reportWebVitals';
+import { createServer } from "miragejs";
+
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {
+  dummyData,
+  modelURL,
+  IModelResponse,
+} from './api';
+
+// Configure the dummy server
+createServer({
+  routes() {
+    this.post(modelURL, () => dummyData as IModelResponse);
+  }
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
