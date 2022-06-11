@@ -4,26 +4,31 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import { dummyData } from './api';
+import { AppPage, IBoardData } from './types';
 import Image from  './components/Image';
 import NavBar from './components/NavBar';
 import StoryBoard from './components/StoryBoard';
-import { IBoardData } from './types';
+import HomePage from './HomePage'
+import BoardPage from './BoardPage'
+import AboutPage from './AboutPage'
 
 export default function App() {
+  const [currentTab, setCurrentTab] = useState<AppPage>(AppPage.HOME);
   const [boardData, setBoardData] = useState<IBoardData>({
     frames: [],
   });
   return (
     <div className="App">
-      <NavBar />
+      <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <Container maxWidth="xl">
         <div style={{height: "15px"}}/>
         <Typography variant="h3" gutterBottom>
           Make a Board
         </Typography>
         <div>
-          {dummyData.images.map(img => (
+          {dummyData.images.map((img, i) => (
             <Image 
+              key={i}
               b64img={img}
               style={{
                 display: "block",
@@ -39,7 +44,7 @@ export default function App() {
           }}
         >
           <Typography variant="overline" gutterBottom>
-            Hello, World!
+            Current Page: { currentTab }
           </Typography>
           <StoryBoard
             data={boardData}

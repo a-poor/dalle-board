@@ -1,3 +1,9 @@
+export enum AppPage {
+    HOME = "home",
+    BOARD = "board",
+    ABOUT = "about",
+}
+
 export interface IBoardData {
     frames: IFrameData[];
 }
