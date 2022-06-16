@@ -1,7 +1,7 @@
 export enum AppPage {
-    HOME = "home",
-    BOARD = "board",
-    ABOUT = "about",
+    HOME = "Home",
+    BOARD = "Board",
+    ABOUT = "About",
 }
 
 export interface IBoardData {

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Typography from '@mui/material/Typography';
 
 export default function BoardPage() {
   return (
-    <div>
-      <h1>Board Page</h1>
-    </div>
-  )
+    <>
+      <Typography variant="h3" gutterBottom>
+        Board
+      </Typography>
+    </>
+  );
 }

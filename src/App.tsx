@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Routes, Route } from "react-router-dom";
 
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
@@ -11,6 +12,7 @@ import StoryBoard from './components/StoryBoard';
 import HomePage from './HomePage'
 import BoardPage from './BoardPage'
 import AboutPage from './AboutPage'
+import Footer from './components/Footer'
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<AppPage>(AppPage.HOME);
@@ -22,10 +24,19 @@ export default function App() {
       <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <Container maxWidth="xl">
         <div style={{height: "15px"}}/>
-        <Typography variant="h3" gutterBottom>
+        {/* <Typography variant="h3" gutterBottom>
           Make a Board
-        </Typography>
-        <div>
+        </Typography> */}
+        
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/board" element={<BoardPage />} />
+          <Route path="/about" element={<AboutPage />} />
+        </Routes>
+
+        <Footer />
+
+        {/* <div>
           {dummyData.images.map((img, i) => (
             <Image 
               key={i}
@@ -35,8 +46,9 @@ export default function App() {
               }}
             />
           ))}
-        </div>
-        <hr />
+        </div> */}
+        
+        {/* <hr />
         <div
           style={{
             textAlign: "center",
@@ -45,12 +57,9 @@ export default function App() {
         >
           <Typography variant="overline" gutterBottom>
             Current Page: { currentTab }
-          </Typography>
-          <StoryBoard
-            data={boardData}
-            setData={setBoardData}
-          />
+          </Typography> 
         </div>
+        */}
       </Container>
     </div>
   );
