@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import GestureIcon from '@mui/icons-material/Gesture';
+import Stack from '@mui/material/Stack';
 import { useNavigate } from "react-router-dom";
 
 import { AppPage } from '../types';
@@ -45,7 +46,6 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
             variant="h4"
             noWrap
             component="a"
-            href=""
             sx={{
               fontFamily: 'roboto',
               fontWeight: 700,
@@ -74,7 +74,7 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
               },
             }}
           >
-            <ButtonGroup>
+            <Stack direction="row" spacing={1}>
               <Button 
                 variant="contained" 
                 disableElevation 
@@ -120,7 +120,7 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
               >
                 About
               </Button>
-            </ButtonGroup>
+            </Stack>
           </Box>
         </Toolbar>
       </AppBar>
