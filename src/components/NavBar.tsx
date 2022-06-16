@@ -84,6 +84,9 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
                   navigate("/")
                 }}
                 disabled={currentTab == AppPage.HOME}
+                style={{
+                  color: currentTab == AppPage.HOME ? "#fff" : "inherit",
+                }}
               >
                 Home
               </Button>
@@ -96,6 +99,9 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
                   navigate("/board")
                 }}
                 disabled={currentTab == AppPage.BOARD}
+                style={{
+                  color: currentTab == AppPage.BOARD ? "#fff" : "inherit",
+                }}
               >
                 Board
               </Button>
@@ -108,6 +114,9 @@ export default function NavBar({ currentTab, setCurrentTab }: INavBarProps) {
                   navigate("/about")
                 }}
                 disabled={currentTab == AppPage.ABOUT}
+                style={{
+                  color: currentTab == AppPage.ABOUT ? "#fff" : "inherit",
+                }}
               >
                 About
               </Button>
