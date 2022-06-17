@@ -83,30 +83,26 @@ export default function BoardFrame({ frameData, isFirst, isLast, onEdit, onMoveL
       </CardContent>
 
       <CardActions>
-        <Tooltip title="Edit frame">
-          <IconButton onClick={onEdit}>
+        <IconButton onClick={onEdit} color="primary">
+          <Tooltip title="Edit frame">
             <ModeEditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Move frame left">
-          <span>
-            <IconButton disabled={isFirst} onClick={onMoveLeft}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Tooltip title="Move frame right">
-          <span>
-            <IconButton disabled={isLast} onClick={onMoveRight}>
-              <ChevronRightIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Tooltip title="Delete frame">
-          <IconButton onClick={onDelete}>
+          </Tooltip>
+        </IconButton>
+        <IconButton disabled={isFirst} onClick={onMoveLeft} color="primary">
+          <Tooltip title="Move frame left">
+            <ChevronLeftIcon />
+          </Tooltip>
+        </IconButton>
+        <IconButton disabled={isLast} onClick={onMoveRight} color="primary">
+          <Tooltip title="Move frame right">
+            <ChevronRightIcon />
+          </Tooltip>
+        </IconButton>
+        <IconButton onClick={onDelete} color="warning">
+          <Tooltip title="Delete frame">
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+          </Tooltip>
+        </IconButton>
       </CardActions>
     </BaseBoardFrame>
   );

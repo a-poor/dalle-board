@@ -23,7 +23,7 @@ export default function StoryBoard({data, setData}: IStoryBoardProps) {
   return (
     <Grid 
       container 
-      spacing={3}
+      spacing={4}
       style={{
         width: "100%",
         margin: "auto",
