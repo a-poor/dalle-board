@@ -15,6 +15,8 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 import { IFrameData } from '../types';
+import EditFrameDesc from './EditFrameDesc';
+import EditFrameGen from './EditFrameGen';
 
 export interface IEditFrameProps {
   open: boolean;
@@ -72,77 +74,12 @@ export default function EditFrame({ open, onSave, onCancel, frameIndex, frameDat
       >
         Editing Frame {frameIndex + 1}
       </DialogTitle>
-      <DialogContent>
-        <div 
-          style={{
-            height: "350px",
-            width: "100%",
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          <Box
-            style={{
-              flexGrow: 1,
-              minWidth: "400px",
-            }}
-          >
-            <div style={{
-              margin: "auto",
-              marginBottom: "15px",
-            }}>
-              <Skeleton 
-                variant="rectangular" 
-                height={300}
-                width={300}
-                style={{
-                  margin: "auto",
-                  marginBottom: "10px",
-                }}
-              />
-              <Typography 
-                gutterBottom
-                variant="caption"  
-                style={{
-                  textAlign: "center",
-                  color: frameData.frameDescription ? "inherit" : "rgba(0, 0, 0, 0.44)",
-                  marginBottom: "15px",
-                }}
-              >
-                { frameData.imagePrompt || "(No Image Prompt)" }
-              </Typography>
-            </div>
-          </Box>
-          <Box
-            style={{
-              flexGrow: 1,
-              minWidth: "400px",
-            }}
-          >
-            <TextField 
-              multiline
-              fullWidth
-              label="Frame Description"
-              placeholder="Describe the frame..."
-              variant="filled"
-              rows={12}
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-            />
-          </Box>
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button size="large">
-          Save
-        </Button>
-        <Button size="large" onClick={_onCancel}>
-          Edit Frame
-        </Button>
-        <Button size="large" onClick={_onCancel}>
-          Cancel
-        </Button>
-      </DialogActions>
+
+      {genPanelOpen ? ( 
+        <EditFrameGen />
+      ) : (
+        <EditFrameDesc />
+      )}
     </Dialog>
   );
 }
