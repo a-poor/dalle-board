@@ -59,6 +59,14 @@ export default function App() {
   const [boardData, setBoardData] = useState<IBoardData>({
     frames: [],
   });
+  useEffect(() => {
+    setBoardData({
+      frames: dummyData.images.map((img, i) => ({
+        index: i+1,
+        imageData: i % 2 === 0 ? img : undefined,
+      }))
+    });
+  }, []);
 
   return (
     <div className="App">

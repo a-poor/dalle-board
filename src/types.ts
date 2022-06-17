@@ -10,7 +10,7 @@ export interface IBoardData {
 
 export interface IFrameData {
     index: number;
-    imageData: string;
-    imagePrompt: string;
-    frameDescription: string;
+    imageData?: string;
+    imagePrompt?: string;
+    frameDescription?: string;
 }
