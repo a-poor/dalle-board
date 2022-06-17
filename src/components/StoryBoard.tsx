@@ -1,25 +1,21 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { IBoardData } from '../types';
-import BaseBoardFrame from './BaseBoardFrame';
 import BoardFrame from './BoardFrame';
-import NewFrame from './NewFrame';
 
 
 export interface IStoryBoardProps {
   data: IBoardData;
-  setData?: (d: IBoardData) => void;
+
+  onEdit?: (index: number) => void;
+  onMoveLeft?: (index: number) => void;
+  onMoveRight?: (index: number) => void;
+  onDelete?: (index: number) => void;
+  onAddFrame?: (index: number) => void;
 }
 
-export default function StoryBoard({data, setData}: IStoryBoardProps) {
+export default function StoryBoard({data, onEdit, onMoveLeft, onMoveRight, onDelete, onAddFrame}: IStoryBoardProps) {
   return (
     <div
       style={{
@@ -44,24 +40,18 @@ export default function StoryBoard({data, setData}: IStoryBoardProps) {
             key={i}
           >
             <BoardFrame 
+              index={i}
               frameData={frame}
               isFirst={i === 0}
               isLast={i === data.frames.length - 1}
-              onEdit={undefined}
-              onMoveLeft={undefined}
-              onMoveRight={undefined}
-              onDelete={undefined}
+              onEdit={onEdit && (() => onEdit(i))}
+              onMoveLeft={onMoveLeft && (() => onMoveLeft(i))}
+              onMoveRight={onMoveRight && (() => onMoveRight(i))}
+              onDelete={onDelete && (() => onDelete(i))}
+              onAddFrame={onAddFrame && (() => onAddFrame(i))}
             />
           </Grid>
         ))}
-        <Grid 
-          item 
-          xs={12} 
-          sm={6}
-          md={4}
-        >
-          <NewFrame onClick={() => undefined} />
-        </Grid>
       </Grid>
     </div>
   );

@@ -9,14 +9,71 @@ import Tooltip from '@mui/material/Tooltip';
 import { IBoardData } from './types';
 import StoryBoard from './components/StoryBoard';
 import ConfirmDelete from './components/ConfirmDelete';
+import EditFrame from './components/EditFrame';
 
 export interface IBoardPageProps {
   data: IBoardData;
-  setData?: (d: IBoardData) => void;
+  setData: (d: IBoardData) => void;
 }
 
 export default function BoardPage({data, setData}: IBoardPageProps) {
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(true);
+  // Track state of the "Confirm Delete Frame" dialog
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
+  // The frame to delete when the "Confirm Delete Frame" dialog is confirmed
+  const [frameToDelete, setFrameToDelete] = useState(-1);
+
+  // Is the "Confirm Delete Frame" dialog open?
+  const [editFrameOpen, setEditFrameOpen] = useState(false);
+
+  // What frame data is being edited?
+  const [editFrameData, setEditFrameData] = useState({});
+
+  // What frame number is being edited?
+  const [frameBeingEdited, setFrameBeingEdited] = useState<number>(0);
+
+
+  // Create functions to handle frame events
+  const onMoveLeft = (i: number) => {
+    // Can't move left if already first frame
+    if (i < 1) return;
+
+    // Copy the current data
+    const newData = JSON.parse(JSON.stringify(data));
+
+    // Swap the frames
+    const temp = newData.frames[i - 1];
+    newData.frames[i - 1] = newData.frames[i];
+    newData.frames[i] = temp;
+
+    // Update the state
+    setData(newData);
+  };
+  const onMoveRight = (i: number) => {
+    // Can't move left if already first frame
+    if (i >= data.frames.length - 1) return;
+
+    // Copy the current data
+    const newData = JSON.parse(JSON.stringify(data));
+
+    // Swap the frames
+    const temp = newData.frames[i + 1];
+    newData.frames[i + 1] = newData.frames[i];
+    newData.frames[i] = temp;
+
+    // Update the state
+    setData(newData);
+  };
+  const onAddFrame = (i: number) => {
+    i;
+  };
+  const onEdit = (i: number) => {
+    i;
+  };
+  const onDelete = (i: number) => {
+    i;
+  };
+
   return (
     <>
       <Typography variant="h3" gutterBottom>
@@ -59,13 +116,27 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
       {/* The actual storyboard. */}
       <StoryBoard
         data={data}
-        setData={setData}
+        onEdit={onEdit}
+        onMoveLeft={onMoveLeft}
+        onMoveRight={onMoveRight}
+        onDelete={onDelete}
+        onAddFrame={onAddFrame}
       />
 
       <ConfirmDelete
         open={confirmDeleteOpen}
         onConfirm={() => setConfirmDeleteOpen(false)}
         onCancel={() => setConfirmDeleteOpen(false)}
+      />
+      <EditFrame
+        frameIndex={frameBeingEdited}
+        open={editFrameOpen}
+        onCancel={() => setEditFrameOpen(false)}
+        onSave={() => {
+          setEditFrameOpen(false);
+          // ...
+        }}
+        frameData={editFrameData}
       />
     </>
   );

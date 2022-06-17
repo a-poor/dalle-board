@@ -17,6 +17,8 @@ export default function ConfirmDelete({open, onConfirm, onCancel}: IConfirmDelet
     <Dialog
       open={open}
       onClose={onCancel}
+      fullWidth
+      maxWidth="md"
     >
       <DialogTitle>
         Confirm Delete

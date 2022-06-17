@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,6 +24,7 @@ import { IFrameData } from '../types';
 const defaultImgSize = 256;
 
 export interface IBoardFrameProps {
+  index: number;
   frameData: IFrameData;
   isFirst?: boolean;
   isLast?: boolean;
@@ -31,13 +32,14 @@ export interface IBoardFrameProps {
   onMoveLeft?: () => void;
   onMoveRight?: () => void;
   onDelete?: () => void;
+  onAddFrame?: () => void;
 }
 
-export default function BoardFrame({ frameData, isFirst, isLast, onEdit, onMoveLeft, onMoveRight, onDelete }: IBoardFrameProps) {
+export default function BoardFrame({ index, frameData, isFirst, isLast, onEdit, onMoveLeft, onMoveRight, onDelete, onAddFrame }: IBoardFrameProps) {
   return (
     <BaseBoardFrame>
       <CardHeader 
-        subheader={`Frame: ${ frameData.index }`}
+        subheader={`Frame: ${ index+1 }`}
       />
 
       {frameData.imageData && (
@@ -101,6 +103,11 @@ export default function BoardFrame({ frameData, isFirst, isLast, onEdit, onMoveL
         <IconButton onClick={onDelete} color="error">
           <Tooltip title="Delete frame">
             <DeleteIcon />
+          </Tooltip>
+        </IconButton>
+        <IconButton onClick={onAddFrame} color="primary">
+          <Tooltip title="Add frame to the right">
+            <AddBoxIcon />
           </Tooltip>
         </IconButton>
       </CardActions>
