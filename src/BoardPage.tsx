@@ -5,11 +5,10 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import ClearIcon from '@mui/icons-material/Clear';
 import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
 
 import { IBoardData } from './types';
 import StoryBoard from './components/StoryBoard';
-import ConfirmDelete from './components/ConfirmDelete';
-import EditFrame from './components/EditFrame';
 
 export interface IBoardPageProps {
   data: IBoardData;
@@ -39,7 +38,7 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
     if (i < 1) return;
 
     // Copy the current data
-    const newData = JSON.parse(JSON.stringify(data));
+    const newData: IBoardData = JSON.parse(JSON.stringify(data));
 
     // Swap the frames
     const temp = newData.frames[i - 1];
@@ -54,7 +53,7 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
     if (i >= data.frames.length - 1) return;
 
     // Copy the current data
-    const newData = JSON.parse(JSON.stringify(data));
+    const newData: IBoardData = JSON.parse(JSON.stringify(data));
 
     // Swap the frames
     const temp = newData.frames[i + 1];
@@ -65,13 +64,27 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
     setData(newData);
   };
   const onAddFrame = (i: number) => {
-    i;
+    // Copy the current data
+    const newData: IBoardData = JSON.parse(JSON.stringify(data));
+
+    // Add a new frame
+    newData.frames.splice(i + 1, 0, {});
+
+    // Update the state
+    setData(newData);
   };
   const onEdit = (i: number) => {
     i;
   };
   const onDelete = (i: number) => {
-    i;
+    // Copy the current data
+    const newData: IBoardData = JSON.parse(JSON.stringify(data));
+
+    // Add a new frame
+    newData.frames.splice(i, 1);
+
+    // Update the state
+    setData(newData);
   };
 
   return (
@@ -109,9 +122,7 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
           </Fab>
         </Tooltip>
       </Stack>
-
-      {/* TODO – Remove this? */}
-      <hr />
+      <Divider />
 
       {/* The actual storyboard. */}
       <StoryBoard
@@ -121,22 +132,6 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
         onMoveRight={onMoveRight}
         onDelete={onDelete}
         onAddFrame={onAddFrame}
-      />
-
-      <ConfirmDelete
-        open={confirmDeleteOpen}
-        onConfirm={() => setConfirmDeleteOpen(false)}
-        onCancel={() => setConfirmDeleteOpen(false)}
-      />
-      <EditFrame
-        frameIndex={frameBeingEdited}
-        open={editFrameOpen}
-        onCancel={() => setEditFrameOpen(false)}
-        onSave={() => {
-          setEditFrameOpen(false);
-          // ...
-        }}
-        frameData={editFrameData}
       />
     </>
   );

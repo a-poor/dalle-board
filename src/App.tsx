@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { faker } from '@faker-js/faker';
 
 import './App.css';
 import { dummyData } from './api';
@@ -60,6 +61,8 @@ export default function App() {
     setBoardData({
       frames: dummyData.images.map((img, i) => ({
         imageData: i % 2 === 0 ? img : undefined,
+        frameDescription: faker.lorem.sentence(25),
+        imagePrompt: faker.lorem.sentence(8),
       }))
     });
   }, []);

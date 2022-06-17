@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 export default function Footer() {
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
           marginBottom: "25px",
         }}
       >
-        <hr />
+        <Divider />
         <Typography variant="overline" gutterBottom>
           Current Page: { "currentTab" }
         </Typography> 
