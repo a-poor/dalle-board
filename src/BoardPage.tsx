@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { IBoardData } from './types';
 import StoryBoard from './components/StoryBoard';
+import ConfirmDelete from './components/ConfirmDelete';
 
 export interface IBoardPageProps {
   data: IBoardData;
@@ -15,6 +16,7 @@ export interface IBoardPageProps {
 }
 
 export default function BoardPage({data, setData}: IBoardPageProps) {
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(true);
   return (
     <>
       <Typography variant="h3" gutterBottom>
@@ -60,6 +62,11 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
         setData={setData}
       />
 
+      <ConfirmDelete
+        open={confirmDeleteOpen}
+        onConfirm={() => setConfirmDeleteOpen(false)}
+        onCancel={() => setConfirmDeleteOpen(false)}
+      />
     </>
   );
 }

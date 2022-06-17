@@ -21,41 +21,48 @@ export interface IStoryBoardProps {
 
 export default function StoryBoard({data, setData}: IStoryBoardProps) {
   return (
-    <Grid 
-      container 
-      spacing={4}
+    <div
       style={{
-        width: "100%",
-        margin: "auto",
+        margin: "25px auto",
       }}
     >
-      {data.frames.map((frame, i) => (
-        <Grid 
-          item 
-          xs={12} 
-          sm={6}
-          md={4} 
-          key={i}
-        >
-          <BoardFrame 
-            frameData={frame}
-            isFirst={i === 0}
-            isLast={i === data.frames.length - 1}
-            onEdit={undefined}
-            onMoveLeft={undefined}
-            onMoveRight={undefined}
-            onDelete={undefined}
-          />
-        </Grid>
-      ))}
       <Grid 
+        container 
+        spacing={2}
+        style={{
+          width: "100%",
+          margin: "auto",
+        }}
+      >
+        {data.frames.map((frame, i) => (
+          <Grid 
+            item 
+            xs={12} 
+            sm={6}
+            md={4}
+            lg={3}
+            key={i}
+          >
+            <BoardFrame 
+              frameData={frame}
+              isFirst={i === 0}
+              isLast={i === data.frames.length - 1}
+              onEdit={undefined}
+              onMoveLeft={undefined}
+              onMoveRight={undefined}
+              onDelete={undefined}
+            />
+          </Grid>
+        ))}
+        <Grid 
           item 
           xs={12} 
           sm={6}
           md={4}
         >
           <NewFrame onClick={() => undefined} />
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 }

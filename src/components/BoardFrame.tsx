@@ -98,7 +98,7 @@ export default function BoardFrame({ frameData, isFirst, isLast, onEdit, onMoveL
             <ChevronRightIcon />
           </Tooltip>
         </IconButton>
-        <IconButton onClick={onDelete} color="warning">
+        <IconButton onClick={onDelete} color="error">
           <Tooltip title="Delete frame">
             <DeleteIcon />
           </Tooltip>
