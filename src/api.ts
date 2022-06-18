@@ -5,7 +5,7 @@ export const modelURL = "https://bf.dallemini.ai/generate";
 export const dummyData = _dummyData as IModelResponse;
 
 export interface IModelRequest {
-    prompt: string;
+    prompt?: string;
     signal?: AbortController;
 }
 
@@ -20,6 +20,10 @@ export interface IAPIResponse {
 }
 
 export async function generateImages(req: IModelRequest): Promise<IAPIResponse>{
+    // Confirm that the prompt is not empty
+    if (!req.prompt) throw new Error("Prompt is required");
+
+    // Send the request
     return await fetch(modelURL, {
         referrer: "https://hf.space/",
         method: "POST",

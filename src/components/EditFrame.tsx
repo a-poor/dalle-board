@@ -18,29 +18,53 @@ import { IFrameData } from '../types';
 import EditFrameDesc from './EditFrameDesc';
 import EditFrameGen from './EditFrameGen';
 
-export interface IEditFrameProps {
-  open: boolean;
-  onSave?: () => void;
-  onCancel?: () => void;
 
-  frameIndex: number;
-  frameData: IFrameData;
-  setFrameData?: (frameData: IFrameData) => void;
+enum EditFrameMode {
+  Description,
+  Generate,
 }
 
-export default function EditFrame({ open, onSave, onCancel, frameIndex, frameData, setFrameData }: IEditFrameProps) {
-  const [desc, setDesc] = useState(frameData.frameDescription);
-  const _onCancel = () => {
-    setDesc(frameData.frameDescription);
-    onCancel && onCancel();
-  }
+export interface IEditFrameProps {
+  /** Is the EditFrame dialog open? */
+  open: boolean;
 
-  const [genPanelOpen, setGenPanelOpen] = useState(false);
+  /** Callback to run when closing the dialog. */
+  onClose: () => void;
+
+  /** Index of the frame being edited. */
+  frameIndex: number;
+
+  /** Initial frame data to edit. */
+  frameData: IFrameData;
+
+  /** Callback to run in order to save the frame updates. */
+  setFrameData: (frameData: IFrameData) => void;
+}
+
+export default function EditFrame({ open, onClose, frameIndex, frameData, setFrameData }: IEditFrameProps) {
+  // Store the state of the frame while editing.
+  const [editFrameData, _setEditFrameData] = useState(frameData);
+
+
+  // Function to run to save the edits.
+  const onSave = () => {
+    setFrameData && setFrameData(editFrameData);
+    onClose && onClose();
+  };
+
+  // Function to run to cancel the edits.
+  const onCancel = () => {
+    setFrameData && setFrameData(frameData);
+    onClose && onClose();
+  };
+
+  // State to determine the mode the edit dialog is in.
+  const [mode, setMode] = useState(EditFrameMode.Description);
 
   return (
     <Dialog
       open={open}
-      onClose={_onCancel}
+      onClose={onCancel}
       fullWidth
       maxWidth="md"
     >
@@ -52,15 +76,20 @@ export default function EditFrame({ open, onSave, onCancel, frameIndex, frameDat
         }}
       >
         <div>
-          {/* <IconButton size="small">
-            <Tooltip title="Go Back">
-              <ChevronLeftIcon/>
-            </Tooltip>
-          </IconButton> */}
+          {mode === EditFrameMode.Generate && (
+            <IconButton 
+              size="small" 
+              onClick={() => setMode(EditFrameMode.Description)}
+            >
+              <Tooltip title="Go Back">
+                <ChevronLeftIcon/>
+              </Tooltip>
+            </IconButton>
+          )}
         </div>
         <div style={{ flexGrow: 1 }}/>
         <div>
-          <IconButton size="small" onClick={_onCancel}>
+          <IconButton size="small" onClick={onCancel}>
             <Tooltip title="Close">
               <CloseIcon/>
             </Tooltip>
@@ -72,14 +101,72 @@ export default function EditFrame({ open, onSave, onCancel, frameIndex, frameDat
           paddingTop: "3px",
         }}
       >
-        Editing Frame {frameIndex + 1}
+        {mode === EditFrameMode.Description && (
+          `Editing Frame ${frameIndex + 1}'s Description`
+        )}
+        {mode === EditFrameMode.Generate && (
+          `Generating Image for Frame ${frameIndex + 1}`
+        )}
       </DialogTitle>
 
-      {genPanelOpen ? ( 
-        <EditFrameGen />
-      ) : (
-        <EditFrameDesc />
+      {/* Edit the Text Description */}
+      {mode === EditFrameMode.Description && (
+        <EditFrameDesc
+          prompt={editFrameData.imagePrompt}
+          desc={editFrameData.frameDescription}
+          setDesc={(desc: string) => _setEditFrameData({ 
+            ...editFrameData, 
+            frameDescription: desc,
+          })}
+        />
       )}
+
+      {/* (Optionally Change Prompt &) Regenerate Images */}
+      {mode === EditFrameMode.Generate && (
+        <EditFrameGen 
+          prompt={editFrameData.imagePrompt}
+          desc={editFrameData.frameDescription}
+          setPrompt={(p: string) => _setEditFrameData({ 
+            ...editFrameData, 
+            imagePrompt: p,
+          })}
+          setImg={(img: string) => _setEditFrameData({ 
+            ...editFrameData, 
+            imageData: img,
+          })}
+        />
+      )}
+
+      <DialogActions>
+        {mode === EditFrameMode.Description && (
+          <Button 
+            size="large" 
+            onClick={() => setMode(EditFrameMode.Generate)}
+          >
+            Edit Frame
+          </Button>
+        )}
+        {mode === EditFrameMode.Generate && (
+          <Button 
+            size="large" 
+            onClick={() => setMode(EditFrameMode.Description)}
+          >
+            Edit Description
+          </Button>
+        )}
+        <Button 
+          size="large" 
+          onClick={onSave}
+        >
+          Save
+        </Button>
+        <Button 
+          size="large"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

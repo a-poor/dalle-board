@@ -17,21 +17,17 @@ import TextField from '@mui/material/TextField';
 import { IFrameData } from '../types';
 
 export interface IEditFrameDescProps {
-  open: boolean;
-  onSave?: () => void;
-  onCancel?: () => void;
+  /** The frame's description. */
+  desc?: string;
 
-  frameIndex: number;
-  frameData: IFrameData;
-  setFrameData?: (frameData: IFrameData) => void;
+  /** A function to set the frame's description. */
+  setDesc: (desc: string) => void;
+  
+  /** The text prompt used to generate the image. */
+  prompt?: string;
 }
 
-export default function EditFrameDesc({ open, onSave, onCancel, frameIndex, frameData, setFrameData }: IEditFrameDescProps) {
-  const [desc, setDesc] = useState(frameData.frameDescription);
-  const _onCancel = () => {
-    setDesc(frameData.frameDescription);
-    onCancel && onCancel();
-  };
+export default function EditFrameDesc({ desc, setDesc, prompt }: IEditFrameDescProps) {
   return (
     <>
       <DialogContent>
@@ -67,11 +63,11 @@ export default function EditFrameDesc({ open, onSave, onCancel, frameIndex, fram
                 variant="caption"  
                 style={{
                   textAlign: "center",
-                  color: frameData.frameDescription ? "inherit" : "rgba(0, 0, 0, 0.44)",
+                  color: desc ? "inherit" : "rgba(0, 0, 0, 0.44)",
                   marginBottom: "15px",
                 }}
               >
-                { frameData.imagePrompt || "(No Image Prompt)" }
+                { prompt || "(No Image Prompt)" }
               </Typography>
             </div>
           </Box>
@@ -94,17 +90,6 @@ export default function EditFrameDesc({ open, onSave, onCancel, frameIndex, fram
           </Box>
         </div>
       </DialogContent>
-      <DialogActions>
-        <Button size="large">
-          Save
-        </Button>
-        <Button size="large" onClick={_onCancel}>
-          Edit Frame
-        </Button>
-        <Button size="large" onClick={_onCancel}>
-          Cancel
-        </Button>
-      </DialogActions>
     </>
   );
 }

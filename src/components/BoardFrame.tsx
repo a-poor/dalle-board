@@ -135,11 +135,8 @@ export default function BoardFrame({ index, frameData, isFirst, isLast, onEdit, 
         open={editFrameOpen}
         frameIndex={index}
         frameData={frameData}
-        onCancel={() => setEditFrameOpen(false)}
-        onSave={() => {
-          setEditFrameOpen(false);
-          // ...
-        }}
+        onClose={() => setEditFrameOpen(false)}
+        setFrameData={(d: IFrameData) => null}
       />
     </>
   );

@@ -12,6 +12,7 @@ import BoardPage from './BoardPage'
 import AboutPage from './AboutPage'
 import Footer from './components/Footer'
 
+
 export default function App() {
   // Create a state manager to sync the react-router
   // location with the NavBar's current tab.
