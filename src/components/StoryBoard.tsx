@@ -1,18 +1,18 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 
-import { IBoardData } from '../types';
+import { IBoardData, IFrameData } from '../types';
 import BoardFrame from './BoardFrame';
 
 
 export interface IStoryBoardProps {
   data: IBoardData;
 
-  onEdit?: (index: number) => void;
-  onMoveLeft?: (index: number) => void;
-  onMoveRight?: (index: number) => void;
-  onDelete?: (index: number) => void;
-  onAddFrame?: (index: number) => void;
+  onAddFrame: (i: number) => void;
+  onMoveLeft: (i: number) => void;
+  onMoveRight: (i: number) => void;
+  onDelete: (i: number) => void;
+  onEdit: (i: number, f: IFrameData) => void;
 }
 
 export default function StoryBoard({data, onEdit, onMoveLeft, onMoveRight, onDelete, onAddFrame}: IStoryBoardProps) {
@@ -44,11 +44,11 @@ export default function StoryBoard({data, onEdit, onMoveLeft, onMoveRight, onDel
               frameData={frame}
               isFirst={i === 0}
               isLast={i === data.frames.length - 1}
-              onEdit={onEdit && (() => onEdit(i))}
-              onMoveLeft={onMoveLeft && (() => onMoveLeft(i))}
-              onMoveRight={onMoveRight && (() => onMoveRight(i))}
-              onDelete={onDelete && (() => onDelete(i))}
-              onAddFrame={onAddFrame && (() => onAddFrame(i))}
+              onEdit={(f: IFrameData) => onEdit(i, f)}
+              onMoveLeft={() => onMoveLeft(i)}
+              onMoveRight={() => onMoveRight(i)}
+              onDelete={() => onDelete(i)}
+              onAddFrame={() => onAddFrame(i)}
             />
           </Grid>
         ))}

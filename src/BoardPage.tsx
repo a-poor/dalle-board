@@ -7,7 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 
-import { IBoardData } from './types';
+import { IBoardData, IFrameData } from './types';
 import StoryBoard from './components/StoryBoard';
 
 export interface IBoardPageProps {
@@ -73,8 +73,15 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
     // Update the state
     setData(newData);
   };
-  const onEdit = (i: number) => {
-    i;
+  const onEdit = (i: number, f: IFrameData) => {
+    // Copy the current data
+    const newData: IBoardData = JSON.parse(JSON.stringify(data));
+
+    // Update the frame
+    newData.frames[i] = f;
+
+    // Update the state
+    setData(newData);
   };
   const onDelete = (i: number) => {
     // Copy the current data
@@ -83,6 +90,11 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
     // Add a new frame
     newData.frames.splice(i, 1);
 
+    // Make sure the board isn't empty
+    if (newData.frames.length === 0) {
+      newData.frames.push({});
+    }
+
     // Update the state
     setData(newData);
   };
@@ -90,7 +102,7 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
   return (
     <>
       <Typography variant="h3" gutterBottom>
-        Board
+        Create a Storyboard
       </Typography>
 
       {/* Quick short sentence or two about how to get started... */}
@@ -110,13 +122,23 @@ export default function BoardPage({data, setData}: IBoardPageProps) {
         }}
       >
         <Tooltip title="Save the board as a PDF">
-          <Fab variant="extended" color="primary" size="medium">
+          <Fab 
+            variant="extended" 
+            color="primary" 
+            size="medium"
+            onClick={() => undefined}
+          >
             <SaveIcon sx={{mr: 1}}/>
             Export Board
           </Fab>
         </Tooltip>
         <Tooltip title="Clear the board and start over">
-          <Fab variant="extended" color="primary" size="medium">
+          <Fab 
+            variant="extended" 
+            color="primary" 
+            size="medium"
+            onClick={() => setData({frames: [{}]})}
+          >
             <ClearIcon sx={{mr: 1}}/>
             Clear Board
           </Fab>

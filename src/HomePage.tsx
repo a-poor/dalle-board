@@ -16,9 +16,9 @@ export interface IHomePageProps {
 export default function HomePage({ setCurrentTab }: IHomePageProps) {
   return (
     <>
-      <Typography variant="h3" gutterBottom>
+      {/* <Typography variant="h3" gutterBottom>
         Home
-      </Typography>
+      </Typography> */}
       
       <Box style={{
         maxWidth: "950px",

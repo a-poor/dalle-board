@@ -18,9 +18,7 @@ import Button from '@mui/material/Button';
 import BaseBoardFrame from './BaseBoardFrame';
 import ConfirmDelete from './ConfirmDelete';
 import EditFrame from './EditFrame';
-
 import { IFrameData } from '../types';
-
 
 
 const defaultImgSize = 256;
@@ -30,7 +28,7 @@ export interface IBoardFrameProps {
   frameData: IFrameData;
   isFirst?: boolean;
   isLast?: boolean;
-  onEdit?: () => void;
+  onEdit?: (f: IFrameData) => void;
   onMoveLeft?: () => void;
   onMoveRight?: () => void;
   onDelete?: () => void;
@@ -94,12 +92,12 @@ export default function BoardFrame({ index, frameData, isFirst, isLast, onEdit, 
         </CardContent>
 
         <CardActions>
-          <IconButton onClick={() => setEditFrameOpen(true)} color="primary">
+          <IconButton onClick={() => setEditFrameOpen(true)}>
             <Tooltip title="Edit frame">
               <ModeEditIcon />
             </Tooltip>
           </IconButton>
-          <IconButton disabled={isFirst} onClick={onMoveLeft} color="primary">
+          <IconButton disabled={isFirst} onClick={onMoveLeft}>
             <Tooltip title="Move frame left">
               <ChevronLeftIcon />
             </Tooltip>
@@ -109,27 +107,18 @@ export default function BoardFrame({ index, frameData, isFirst, isLast, onEdit, 
               <ChevronRightIcon />
             </Tooltip>
           </IconButton>
-          <IconButton onClick={() => setConfirmDeleteOpen(true)} color="error">
+          <IconButton onClick={onDelete}>
             <Tooltip title="Delete frame">
               <DeleteIcon />
             </Tooltip>
           </IconButton>
-          <IconButton onClick={onAddFrame} color="primary">
+          <IconButton onClick={onAddFrame}>
             <Tooltip title="Add frame to the right">
               <AddBoxIcon />
             </Tooltip>
           </IconButton>
         </CardActions>
       </BaseBoardFrame>
-
-      <ConfirmDelete
-        open={confirmDeleteOpen}
-        onCancel={() => setConfirmDeleteOpen(false)}
-        onConfirm={() => {
-          setConfirmDeleteOpen(false);
-          if (onDelete) onDelete();
-        }}
-      />
 
       <EditFrame
         open={editFrameOpen}

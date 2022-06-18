@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <>
       <Typography variant="h3" gutterBottom>
-        About
+        About DALL-E Board
       </Typography>
       
       <Box style={{
