@@ -31,10 +31,9 @@ export interface IEditFrameGenProps {
 export default function EditFrameGen({prompt, desc, setPrompt, setImg}: IEditFrameGenProps) {
   // Store the state of if frames are being generated.
   const [isGenerating, setIsGenerating] = useState(false);
-
-  let error: unknown;
-  let isLoading = false;
-  let data: IAPIResponse | undefined = undefined;
+  const [error, setError] = useState<unknown>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<IAPIResponse | undefined>(undefined);
 
   // Fetch the data...
   const fetchData = () => {
@@ -42,9 +41,9 @@ export default function EditFrameGen({prompt, desc, setPrompt, setImg}: IEditFra
       'genImages', 
       () => generateImages({ prompt })
     );
-    isLoading = res.isLoading;
-    error = res.error;
-    data = res.data;
+    setIsLoading(res.isLoading);
+    setError(res.error);
+    setData(res.data);
   };
 
   const [selected, setSelected] = useState<number | undefined>(undefined);
