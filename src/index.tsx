@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { createServer } from "miragejs";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import './index.css';
 import App from './App';
@@ -10,6 +12,9 @@ import {
   modelURL,
   IModelResponse,
 } from './api';
+
+/** React-Query client */
+const queryClient = new QueryClient();
 
 // Configure the dummy server
 createServer({
@@ -23,7 +28,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
