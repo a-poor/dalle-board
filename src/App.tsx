@@ -1,15 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import Container from '@mui/material/Container';
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { faker } from '@faker-js/faker';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+
+import AddIcon from '@mui/icons-material/Add';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import './App.css';
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
 
 import NavBar from './components/NavBar';
-import { Skeleton, Typography } from '@mui/material';
 
+
+interface IImageFrameProps {
+  index: number;
+}
+
+export function ImageFrame({index}: IImageFrameProps) {
+  return (
+    <>
+      <Paper 
+        elevation={2}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <div style={{margin: "20px"}}>
+          <div style={{height: "15px"}} />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div>
+              <Typography variant="subtitle1"><i>Frame: {index}</i></Typography>
+            </div>
+            <div style={{flexGrow: 1}}/>
+            <div>
+              <IconButton>
+                <Tooltip title="Delete frame">
+                  <ClearIcon />
+                </Tooltip>
+              </IconButton>
+            </div>
+          </div>
+        </div>
+      </Paper>
+    </>
+  );
+}
+
+export function EmptyBoard() {
+  return (
+    <></>
+  );
+}
+
+export function Board() {
+  const boards = new Array(10).fill(0);
+  return (
+    <>
+      <Grid container spacing={2}>
+        {boards.map((_, i) => (
+          <Grid 
+            item 
+            // lg={3}
+            md={4}
+            sm={6}
+            xs={12}
+            style={{
+              width: "300px",
+              height: "500px",
+            }}
+            key={i}
+          >
+            <ImageFrame index={i} />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+}
 
 export function HomePage() {
   return (
@@ -20,6 +98,33 @@ export function HomePage() {
       <Typography variant="subtitle1">
         Create a storyboard with DALL-E Mini
       </Typography>
+
+      <div 
+        style={{
+          marginTop: "5px", 
+          marginBottom: "15px"
+        }}
+      >
+        <ButtonGroup>
+          <Tooltip title="Add a new frame to the storyboard.">
+            <Button startIcon={<AddIcon />}>
+              Add Frame
+            </Button>
+          </Tooltip>
+          <Tooltip title="Download the storyboard as a PDF.">
+            <Button startIcon={<FileDownloadIcon />}>
+              Export Board
+            </Button>
+          </Tooltip>
+          <Tooltip title="Clear the storyboard and start-over.">
+            <Button startIcon={<ClearIcon />}>
+              Clear Board
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
+      </div>
+
+      <Board />
     </>
   );
 }
