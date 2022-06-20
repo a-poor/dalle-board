@@ -6,100 +6,67 @@ import { faker } from '@faker-js/faker';
 import './App.css';
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
-import NavBar from './components/NavBar';
-import HomePage from './HomePage'
-import BoardPage from './BoardPage'
-import AboutPage from './AboutPage'
-import Footer from './components/Footer'
 
+import NavBar from './components/NavBar';
+import { Skeleton, Typography } from '@mui/material';
+
+
+export function HomePage() {
+  return (
+    <>
+      <Typography variant="h3">
+        DALL-E Board
+      </Typography>
+      <Typography variant="subtitle1">
+        Create a storyboard with DALL-E Mini
+      </Typography>
+    </>
+  );
+}
+
+export function AboutPage() {
+  return (
+    <>
+      <Typography variant="h3" gutterBottom>
+        About DALL-E Board
+      </Typography>
+      <Skeleton 
+        variant="rectangular" 
+        style={{
+          margin: "auto",
+          width: "850px",
+          height: "450px",
+        }}
+      />
+      <Typography variant="caption" gutterBottom>
+        {'This is an image caption describing the above image. Not sure what it is yet...'}
+      </Typography>
+
+      <Typography variant="body1" gutterBottom>
+        {"This is the text of the about page and it has the about page info and I'm not sure what THAT will"}
+        {"be yet but this is where it will be when I figure it out."}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {"In the meantime, though, this is some placeholder text and it is taking up space so that I"}
+        {"can see what the about page will look like."}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        That is all for now.
+      </Typography>
+    </>
+  );
+}
 
 export default function App() {
-  // Create a state manager to sync the react-router
-  // location with the NavBar's current tab.
-  const navigate = useNavigate();
-  const [currentTab, _setCurrentTab] = useState<AppPage>(AppPage.HOME);
-  const setCurrentTab = (tab: AppPage) => {
-    // Set the tab w/ react
-    _setCurrentTab(tab);
-
-    // Navigate to the page
-    switch (tab) {
-      case AppPage.BOARD:
-        navigate("/board");
-        break;
-      case AppPage.ABOUT:
-        navigate("/about");
-        break;
-      default:
-        navigate("/");
-        break;
-    }
-  };
-
-  // Run the following once to ensure the NavBar's tab is
-  // set correctly when the page is loaded initially.
-  const loc = useLocation();
-  useEffect(() => {
-    switch (loc.pathname.toLowerCase()) {
-      case "/board": 
-        setCurrentTab(AppPage.BOARD);
-        return;
-      case "/about":
-        setCurrentTab(AppPage.ABOUT);
-        return;
-      default:
-        setCurrentTab(AppPage.HOME);
-        return;
-    }
-  }, []);
-
-
-  // Store the user's board data
-  const [boardData, setBoardData] = useState<IBoardData>({
-    frames: [],
-  });
-  useEffect(() => {
-    setBoardData({
-      frames: dummyData.images.map((img, i) => ({
-        imageData: i % 2 === 0 ? img : undefined,
-        frameDescription: faker.lorem.sentence(25),
-        imagePrompt: faker.lorem.sentence(8),
-      }))
-    });
-  }, []);
-
   return (
-    <div className="App">
-      <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab}/>
-      <Container maxWidth="xl">
-        <div style={{height: "15px"}}/>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <HomePage 
-                setCurrentTab={setCurrentTab} 
-              />
-            }
-          />
-          <Route 
-            path="/board" 
-            element={
-              <BoardPage 
-                data={boardData} 
-                setData={setBoardData}
-              />
-            }
-          />
-          <Route 
-            path="/about" 
-            element={
-              <AboutPage />
-            }
-          />
-        </Routes>
-        <Footer />
-      </Container>
-    </div>
+    <>
+    <NavBar />
+    <Container maxWidth="lg">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+      </Routes>
+    </Container>
+    </>
   );
 }
