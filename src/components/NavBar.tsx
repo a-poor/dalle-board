@@ -25,7 +25,7 @@ export default function NavBar() {
             )}
             {loc.pathname === "/about" && (
               <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
-                Go Back
+                Back Home
               </Link>
             )}
           </Button>
