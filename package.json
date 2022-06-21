@@ -11,6 +11,8 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.5",
+    "@dnd-kit/sortable": "^7.0.1",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.3",
@@ -18,7 +20,6 @@
     "miragejs": "^0.1.45",
     "pdfkit": "^0.13.0",
     "react": "^17.0.2",
-    "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
@@ -33,7 +34,6 @@
     "@types/node": "^16.11.39",
     "@types/pdfkit": "^0.12.6",
     "@types/react": "^17.0.2",
-    "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",

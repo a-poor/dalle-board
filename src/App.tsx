@@ -15,17 +15,35 @@ import AddIcon from '@mui/icons-material/Add';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ClearIcon from '@mui/icons-material/Clear';
 
+import { 
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from '@dnd-kit/core';
 import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from 'react-beautiful-dnd';
+  useSortable,
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import './App.css';
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
 
 import NavBar from './components/NavBar';
+
+
+const cardSize = {
+  width: "300px",
+  height: "500px",
+}
 
 
 interface IImageFrameProps {
@@ -69,57 +87,86 @@ export function EmptyBoard() {
   );
 }
 
-export function Board() {
-  const boards = new Array(10).fill(0);
-  
-  // Put inside cards
-  /* <ImageFrame index={i} /> */
-
-  const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
-  })
-
+export function GridItem({id}: {id: string}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({id});
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   return (
     <>
-      <DragDropContext onDragEnd={(res, prov) => undefined}>
-        <Grid container spacing={2}>
-          <Droppable droppableId='myDroppableId'>
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
-              >
-                {boards.map((_, i) => (
-                  <Grid 
-                    item 
-                    // lg={3}
-                    md={4}
-                    sm={6}
-                    xs={12}
-                    style={{
-                      width: "300px",
-                      height: "500px",
-                    }}
-                    key={i}
-                  >
-                    <div style={{ 
-                      width: "100%", 
-                      height: "100%", 
-                      backgroundColor: "#f0f00f"
-                    }}/>
-                  </Grid>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </Grid>
-      </DragDropContext>
+      <Grid
+        ref={setNodeRef}
+        item 
+        md={4}
+        sm={6}
+        xs={12}
+        style={{
+          width: cardSize.width,
+          height: cardSize.height,
+          ...style
+        }}
+        {...attributes}
+        {...listeners}
+      >
+        <div style={{ 
+          width: "100%", 
+          height: "100%", 
+          backgroundColor: "#f0f00f"
+        }}>
+          My name is... {id}
+        </div>
+      </Grid>
     </>
   );
 }
 
-export function HomePage() {
+export function Board({data, setData, activeId}: {
+    data: {id: string}[], 
+    setData: (data: {id: string}[]) => void,
+    activeId: string | null,
+}) {
+  return (
+    <>
+    <SortableContext 
+        items={data}
+        strategy={verticalListSortingStrategy}
+      >
+        <Grid container spacing={2}>
+          {data.map(d => (
+            <GridItem
+              key={d.id}
+              id={d.id}
+            />
+          ))}
+        </Grid>
+      </SortableContext>
+      <DragOverlay>
+        {activeId ? (
+          <div style={{ 
+            width: cardSize.width,
+            height: cardSize.height,
+            backgroundColor: "#f00ff0"
+          }}>
+            My name is... {activeId}
+          </div>
+        ) : null}
+      </DragOverlay>
+    </>
+  );
+}
+
+export function HomePage({data, setData, activeId}: {
+    data: {id: string}[], 
+    setData: (data: {id: string}[]) => void,
+    activeId: string | null,
+}) {
   return (
     <>
       <Typography variant="h3">
@@ -154,7 +201,11 @@ export function HomePage() {
         </ButtonGroup>
       </div>
 
-      <Board />
+      <Board 
+        data={data}
+        setData={setData}
+        activeId={activeId}
+      />
     </>
   );
 }
@@ -193,15 +244,54 @@ export function AboutPage() {
 }
 
 export default function App() {
+  const _data = new Array(10).fill(0).map((_, i) => ({
+    id: `id-${i}`,
+  }))
+  const [data, setData] = useState(_data);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
     <>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={({active, over}) => {
+          setActiveId(null);
+          if (over === null) return;
+          if (active.id !== over.id) {
+            setData((items) => {
+              const oldIndex = items.findIndex(d => d.id === active.id);
+              const newIndex = items.findIndex(d => d.id === over.id);
+              return arrayMove(items, oldIndex, newIndex);
+            });
+          }
+        }}
+        onDragStart={({active}) => setActiveId(`${active.id}`)}
+      >
         <NavBar />
         <Container maxWidth="lg">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route 
+              path="/"
+              element={
+                <HomePage 
+                  data={data}
+                  setData={setData}
+                  activeId={activeId}
+                />
+              } 
+            />
             <Route path="/about" element={<AboutPage />} />
           </Routes>
         </Container>
+      </DndContext>
     </>
   );
 }
