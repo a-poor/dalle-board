@@ -15,6 +15,12 @@ import AddIcon from '@mui/icons-material/Add';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ClearIcon from '@mui/icons-material/Clear';
 
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from 'react-beautiful-dnd';
+
 import './App.css';
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
@@ -65,26 +71,50 @@ export function EmptyBoard() {
 
 export function Board() {
   const boards = new Array(10).fill(0);
+  
+  // Put inside cards
+  /* <ImageFrame index={i} /> */
+
+  const getListStyle = (isDraggingOver: boolean) => ({
+    background: isDraggingOver ? "lightblue" : "lightgrey",
+  })
+
   return (
     <>
-      <Grid container spacing={2}>
-        {boards.map((_, i) => (
-          <Grid 
-            item 
-            // lg={3}
-            md={4}
-            sm={6}
-            xs={12}
-            style={{
-              width: "300px",
-              height: "500px",
-            }}
-            key={i}
-          >
-            <ImageFrame index={i} />
-          </Grid>
-        ))}
-      </Grid>
+      <DragDropContext onDragEnd={(res, prov) => undefined}>
+        <Grid container spacing={2}>
+          <Droppable droppableId='myDroppableId'>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                {boards.map((_, i) => (
+                  <Grid 
+                    item 
+                    // lg={3}
+                    md={4}
+                    sm={6}
+                    xs={12}
+                    style={{
+                      width: "300px",
+                      height: "500px",
+                    }}
+                    key={i}
+                  >
+                    <div style={{ 
+                      width: "100%", 
+                      height: "100%", 
+                      backgroundColor: "#f0f00f"
+                    }}/>
+                  </Grid>
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </Grid>
+      </DragDropContext>
     </>
   );
 }
@@ -165,13 +195,13 @@ export function AboutPage() {
 export default function App() {
   return (
     <>
-    <NavBar />
-    <Container maxWidth="lg">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-      </Routes>
-    </Container>
+        <NavBar />
+        <Container maxWidth="lg">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+        </Container>
     </>
   );
 }
