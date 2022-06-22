@@ -11,10 +11,12 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Grow from '@mui/material/Grow';
 
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ClearIcon from '@mui/icons-material/Clear';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 import { 
   DndContext,
@@ -23,6 +25,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  useDroppable,
   DragOverlay,
 } from '@dnd-kit/core';
 import {
@@ -132,6 +135,57 @@ export function GridItem({id}: {id: string}) {
   );
 }
 
+/**
+ * TrashDrop is a droppable location for deleting draggable frames.
+ * If a user picks up a frame, this square will appear in the lower
+ * right of the screen.
+ */
+export function TrashDrop() {
+  const { 
+    active,
+    isOver,
+    setNodeRef,
+  } = useDroppable({
+    id: "trash-drop",
+  });
+  return (
+    <>
+      <Grow in={active !== null}>
+        <div 
+          ref={setNodeRef}
+          style={{
+            width: isOver ? "200px" : "150px",
+            height: isOver ? "200px" : "150px",
+            border: isOver ? "3.5px dashed rgba(235,64,52,0.8)" : "2.5px dashed rgba(235,64,52,0.8)",
+            backgroundColor: "rgba(235,64,52,0.3)",
+            borderRadius: "15px",
+            position: "fixed",
+            right: 10,
+            bottom: 10,
+            color: "rgba(235,64,52,0.8)",
+          }}
+        >
+          <div style={{ 
+            margin: "auto", 
+            marginTop: isOver ? "50px" : "40px",
+            textAlign: "center"
+          }}>
+            <DeleteOutlineOutlinedIcon style={{
+              fontSize: isOver ? "44px" : "24px"
+            }}/>
+            <Typography style={{
+              fontWeight: "bold", 
+              fontSize: isOver ? "22px" : "15px"
+            }}>
+              DELETE FRAME
+            </Typography>
+          </div>
+        </div>
+      </Grow>
+    </>
+  );
+}
+
 export function Board({data, setData, activeId}: {
     data: {id: string}[], 
     setData: (data: {id: string}[]) => void,
@@ -151,6 +205,9 @@ export function Board({data, setData, activeId}: {
             />
           ))}
         </Grid>
+
+        <TrashDrop />
+
       </SortableContext>
       <DragOverlay>
         {activeId ? (
@@ -188,7 +245,7 @@ export function HomePage({data, setData, activeId}: {
           marginBottom: "15px"
         }}
       >
-        <ButtonGroup orientation={buttonQuery ? "horizontal" : "vertical"} disableElevation>
+        <ButtonGroup size={buttonQuery ? "large" : "small"} disableElevation>
           <Tooltip title="Add a new frame to the storyboard.">
             <Button startIcon={<AddIcon />}>
               Add Frame
@@ -250,6 +307,7 @@ export function AboutPage() {
 }
 
 export default function App() {
+  // TODO – Replace the following with a real data source.
   const _data = new Array(10).fill(0).map((_, i) => ({
     id: `id-${i}`,
   }))
@@ -262,7 +320,6 @@ export default function App() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
   return (
     <>
       <DndContext
@@ -270,7 +327,19 @@ export default function App() {
         collisionDetection={closestCenter}
         onDragEnd={({active, over}) => {
           setActiveId(null);
-          if (over === null) return;
+          // If null, do nothing
+          if (over === null) { return; }
+
+          // If trash, delete
+          if (over.id === "trash-drop") {
+            console.log(`Deleting id: ${active.id}`);
+            const i = data.findIndex(d => d.id === active.id);
+            const newData = JSON.parse(JSON.stringify(data)) as ({id: string}[]);
+            newData.splice(i, 1)
+            return setData(newData);
+          }
+
+          // If new location, move the item
           if (active.id !== over.id) {
             setData((items) => {
               const oldIndex = items.findIndex(d => d.id === active.id);
