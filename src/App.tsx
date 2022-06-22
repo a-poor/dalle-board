@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -30,6 +31,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
+  rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -38,7 +40,6 @@ import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
 
 import NavBar from './components/NavBar';
-
 
 const cardSize = {
   width: "300px",
@@ -94,6 +95,8 @@ export function GridItem({id}: {id: string}) {
     setNodeRef,
     transform,
     transition,
+    isOver,
+    isDragging,
   } = useSortable({id});
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -102,8 +105,8 @@ export function GridItem({id}: {id: string}) {
   return (
     <>
       <Grid
+        item
         ref={setNodeRef}
-        item 
         md={4}
         sm={6}
         xs={12}
@@ -118,9 +121,11 @@ export function GridItem({id}: {id: string}) {
         <div style={{ 
           width: "100%", 
           height: "100%", 
-          backgroundColor: "#f0f00f"
+          backgroundColor: isDragging ? "transparent" : "#f0f00f"
         }}>
-          My name is... {id}
+          {!isDragging && <span>
+            My name is... {id}
+          </span>}
         </div>
       </Grid>
     </>
@@ -136,7 +141,7 @@ export function Board({data, setData, activeId}: {
     <>
     <SortableContext 
         items={data}
-        strategy={verticalListSortingStrategy}
+        strategy={rectSortingStrategy}
       >
         <Grid container spacing={2}>
           {data.map(d => (
@@ -167,6 +172,7 @@ export function HomePage({data, setData, activeId}: {
     setData: (data: {id: string}[]) => void,
     activeId: string | null,
 }) {
+  const buttonQuery = useMediaQuery("(min-width:600px)");
   return (
     <>
       <Typography variant="h3">
@@ -182,7 +188,7 @@ export function HomePage({data, setData, activeId}: {
           marginBottom: "15px"
         }}
       >
-        <ButtonGroup>
+        <ButtonGroup orientation={buttonQuery ? "horizontal" : "vertical"} disableElevation>
           <Tooltip title="Add a new frame to the storyboard.">
             <Button startIcon={<AddIcon />}>
               Add Frame
