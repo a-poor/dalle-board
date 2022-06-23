@@ -21,7 +21,8 @@ const cardSize = {
 
 export interface ICardProps {
   id: string;
-  frameImg?: string;
+  frameNumber: number;
+  frameImage?: string;
   frameDesc?: string;
   onEditFrame?: () => void;
 }
@@ -30,7 +31,7 @@ export interface ICardProps {
  * Card represents a frame in the storyboard.
  * 
  */
-export default function Card({id, onEditFrame, frameImg, frameDesc}: ICardProps) {
+export default function Card({id, frameNumber, frameImage, frameDesc, onEditFrame}: ICardProps) {
   const {
     attributes,
     listeners,
@@ -87,7 +88,7 @@ export default function Card({id, onEditFrame, frameImg, frameDesc}: ICardProps)
                 marginTop: "7px",
               }}>
                 <Typography variant="subtitle1">
-                  Frame: {id}
+                  Frame: {frameNumber + 1}
                 </Typography>
               </div>
               <div style={{flexGrow: 1}}/>
@@ -99,10 +100,12 @@ export default function Card({id, onEditFrame, frameImg, frameDesc}: ICardProps)
               height: "200px",
               margin: "10px auto",
             }}>
-              {!frameImg && (
+              {!frameImage && (
                 <Skeleton variant="rectangular" width="100%" height="100%" animation={false}/>
               )}
-              {frameImg && (1)}
+              {frameImage && (
+                1
+              )}
             </Box>
 
 
@@ -115,8 +118,12 @@ export default function Card({id, onEditFrame, frameImg, frameDesc}: ICardProps)
             </Typography>
 
             {/* Footer with Edit Button */}
-            <div style={{position: "absolute", bottom: "8px"}}>
-              <Button onClick={onEditFrame} variant="text">
+            <div style={{position: "absolute", left: "12px", bottom: "15px"}}>
+              <Button 
+                onClick={onEditFrame}
+                variant="outlined"
+                disableElevation
+              >
                 Edit Frame
               </Button>
             </div>

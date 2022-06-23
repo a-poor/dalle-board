@@ -15,6 +15,7 @@ import Board from './components/Board';
 
 export interface IFrameData {
   id: string;
+  frameNumber: number;
 }
 
 export interface IHomePageProps {
@@ -37,7 +38,6 @@ export default function HomePage({data, activeId, onAddFrame, onExportBoard, onC
       <Typography variant="subtitle1">
         Create a storyboard with DALL-E Mini
       </Typography>
-
       <div 
         style={{
           marginTop: "5px", 
@@ -76,7 +76,6 @@ export default function HomePage({data, activeId, onAddFrame, onExportBoard, onC
             </Tooltip>
           </ButtonGroup>
         )}
-
         {!buttonQuery && (
           <Stack direction="row" style={{margin: "auto"}}>
             <Tooltip title="Add a new frame to the storyboard.">
@@ -97,9 +96,7 @@ export default function HomePage({data, activeId, onAddFrame, onExportBoard, onC
           </Stack>
         )}
       </div>
-
       <Divider style={{ margin: "15px auto" }}/>
-
       <Board 
         data={data}
         activeId={activeId}

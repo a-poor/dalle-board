@@ -27,6 +27,7 @@ import CardHover from './CardHover';
 
 export interface IFrameData {
   id: string;
+  frameNumber: number;
 }
 
 export interface IBoardProps {
@@ -49,10 +50,11 @@ export default function Board({data, activeId, onAddFrame}: IBoardProps) {
         strategy={rectSortingStrategy}
       >
         <Grid container spacing={2}>
-          {data.map(d => (
+          {data.map((d, i) => (
             <Card
-              key={d.id}
+              key={i}
               id={d.id}
+              frameNumber={i}
             />
           ))}
         </Grid>
@@ -60,7 +62,9 @@ export default function Board({data, activeId, onAddFrame}: IBoardProps) {
       </SortableContext>
 
       <DragOverlay>
-        {activeId !== null && <CardHover />}
+        {activeId !== null && (
+          <CardHover />
+        )}
       </DragOverlay>
     </>
   );
