@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-
-import { faker } from '@faker-js/faker';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,10 +10,8 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Grow from '@mui/material/Grow';
 
-import AddIcon from '@mui/icons-material/Add';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import ClearIcon from '@mui/icons-material/Clear';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { faker } from '@faker-js/faker';
 
 import { 
   DndContext,
@@ -25,29 +20,33 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay,
 } from '@dnd-kit/core';
 import {
-  useSortable,
   arrayMove,
-  SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 import './App.css';
 import { dummyData } from './api';
 import { AppPage, IBoardData } from './types';
 
 import NavBar from './components/NavBar';
-import AboutPage from './components/AboutPage';
-import HomePage from './components/HomePage';
+import AboutPage from './AboutPage';
+import HomePage from './HomePage';
+import EditFramePage from './EditFramePage';
 
 
 interface IFrameData {
   id: string;
+}
+
+
+function RedirectHomePage() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/');
+  }, []);
+  return (<></>);
 }
 
 export default function App() {
@@ -57,6 +56,8 @@ export default function App() {
   }))
   const [data, setData] = useState(_data);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const [editFrameIndex, setEditFrameIndex] = useState<number | undefined>(undefined);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -118,6 +119,8 @@ export default function App() {
                 } 
               />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/edit/:frameId" element={<EditFramePage />} />
+              <Route path="*" element={<RedirectHomePage />} />
             </Routes>
           </Container>
         </div>

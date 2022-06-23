@@ -11,7 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import Board from './Board';
+import Board from './components/Board';
 
 export interface IFrameData {
   id: string;

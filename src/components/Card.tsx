@@ -1,24 +1,13 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { 
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-} from '@dnd-kit/core';
-import {
-  useSortable,
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  rectSortingStrategy,
-} from '@dnd-kit/sortable';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
 import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 
 import CardPlaceholder from './CardPlaceholder';
 
@@ -43,7 +32,6 @@ export default function Card({id}: ICardProps) {
     setNodeRef,
     transform,
     transition,
-    isOver,
     isDragging,
   } = useSortable({id});
   const style = {
@@ -64,7 +52,7 @@ export default function Card({id}: ICardProps) {
           ...style
         }}
         {...attributes}
-        {...listeners}
+        // {...listeners}
       >
         {isDragging && (<CardPlaceholder />)}
         {!isDragging && (
@@ -73,12 +61,32 @@ export default function Card({id}: ICardProps) {
             style={{ 
               width: "100%", 
               height: "100%", 
-              // backgroundColor: "#f0f00f"
+              boxSizing: "border-box",
+              padding: "5px 8px",
             }}
           >
-            {!isDragging && <span>
-              My name is... {id}
-            </span>}
+            <div
+              style={{
+                display: "flex",
+                margin: "5px 0px",
+              }}
+            >
+              <div style={{
+                marginTop: "5px",
+              }}>
+                <Typography variant="subtitle1">
+                  Frame: {id}
+                </Typography>
+              </div>
+              <div style={{flexGrow: 1}}/>
+              <div>
+                <IconButton disableRipple {...listeners}>
+                  <DragIndicatorIcon />
+                </IconButton>
+              </div>
+            </div>
+            My name is... {id}
+            <Button>Hello</Button>
           </Paper>
         )}
       </Grid>
