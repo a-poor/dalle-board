@@ -1,60 +1,107 @@
 import React from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab'
-import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-import BrushIcon from '@mui/icons-material/Brush';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ClearIcon from '@mui/icons-material/Clear';
 
-import { AppPage } from './types';
+import Board from './components/Board';
 
-
-export interface IHomePageProps {
-  setCurrentTab: (tab: AppPage) => void;
+export interface IFrameData {
+  id: string;
+  frameNumber: number;
 }
 
-export default function HomePage({ setCurrentTab }: IHomePageProps) {
+export interface IHomePageProps {
+  data: IFrameData[];
+  activeId: string | null;
+  onAddFrame: () => void;
+  onExportBoard: () => void;
+  onClearBoard: () => void;
+}
+
+export default function HomePage({data, activeId, onAddFrame, onExportBoard, onClearBoard}: IHomePageProps) {
+  // Media query to determine if the screen is small or not.
+  // Used to determine the button group layout.
+  const buttonQuery = useMediaQuery("(min-width:600px)");
   return (
     <>
-      {/* <Typography variant="h3" gutterBottom>
-        Home
-      </Typography> */}
-      
-      <Box style={{
-        maxWidth: "950px",
-        height: "500px",
-        backgroundColor: "#f0f0f0",
-        margin: "25px auto",
-      }}/>
-
-      <Container>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-
-        <div style={{height: "15px"}}/>
-
-        <Tooltip title="Create a new board">
-          <Fab 
-            variant="extended" 
-            color="primary"
-            size="medium"
-            onClick={() => setCurrentTab(AppPage.BOARD)}
-            style={{
-              margin: "5px 0 25px 0",
-            }}
+      <Typography variant="h3">
+        DALL-E Board
+      </Typography>
+      <Typography variant="subtitle1">
+        Create a storyboard with DALL-E Mini
+      </Typography>
+      <div 
+        style={{
+          marginTop: "5px", 
+          marginBottom: "15px"
+        }}
+      >
+        {buttonQuery && (
+          <ButtonGroup 
+            size="small"
+            disableElevation
+            style={{margin: "auto"}}
           >
-            <BrushIcon sx={{mr: 1}}/>
-            Get Started
-          </Fab>
-        </Tooltip>
-      </Container>
+            <Tooltip title="Add a new frame to the storyboard.">
+              <Button
+                startIcon={<AddIcon />} 
+                onClick={onAddFrame}
+              >
+                Add Frame
+              </Button>
+            </Tooltip>
+            <Tooltip title="Download the storyboard as a PDF.">
+              <Button
+                startIcon={<FileDownloadIcon />} 
+                onClick={onExportBoard}
+              >
+                Export Board
+              </Button>
+            </Tooltip>
+            <Tooltip title="Clear the storyboard and start-over.">
+              <Button
+                startIcon={<ClearIcon />} 
+                onClick={onClearBoard}
+              >
+                Clear Board
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+        )}
+        {!buttonQuery && (
+          <Stack direction="row" style={{margin: "auto"}}>
+            <Tooltip title="Add a new frame to the storyboard.">
+              <IconButton onClick={onAddFrame}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Download the storyboard as a PDF.">
+              <IconButton onClick={onExportBoard}>
+                <FileDownloadIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Clear the storyboard and start-over.">
+              <IconButton onClick={onClearBoard}>
+                <ClearIcon />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        )}
+      </div>
+      <Divider style={{ margin: "15px auto" }}/>
+      <Board 
+        data={data}
+        activeId={activeId}
+        onAddFrame={onAddFrame}
+      />
     </>
   );
 }

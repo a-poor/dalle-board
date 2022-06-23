@@ -1,7 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function AboutPage() {
   return (
@@ -9,25 +8,29 @@ export default function AboutPage() {
       <Typography variant="h3" gutterBottom>
         About DALL-E Board
       </Typography>
-      
-      <Box style={{
-        maxWidth: "950px",
-        height: "500px",
-        backgroundColor: "#f0f0f0",
-        margin: "25px auto",
-      }}/>
+      <Skeleton 
+        variant="rectangular" 
+        style={{
+          margin: "auto",
+          width: "850px",
+          height: "450px",
+        }}
+      />
+      <Typography variant="caption" gutterBottom>
+        {'This is an image caption describing the above image. Not sure what it is yet...'}
+      </Typography>
 
-      <Container>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          Here is the basic starting text about how this is what this is about and also what you can do here etc etc etc...
-        </Typography>
-      </Container>
+      <Typography variant="body1" gutterBottom>
+        {"This is the text of the about page and it has the about page info and I'm not sure what THAT will"}
+        {"be yet but this is where it will be when I figure it out."}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {"In the meantime, though, this is some placeholder text and it is taking up space so that I"}
+        {"can see what the about page will look like."}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        That is all for now.
+      </Typography>
     </>
   );
 }
