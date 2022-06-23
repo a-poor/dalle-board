@@ -12,8 +12,8 @@ export default function CardHover() {
       <Paper 
         elevation={5}
         style={{
-          width: "300px",
-          height: "350px",
+          width: "200px",
+          height: "250px",
         }}
       />
     </>
