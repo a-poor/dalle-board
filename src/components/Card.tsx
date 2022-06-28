@@ -24,7 +24,7 @@ export interface ICardProps {
   frameNumber: number;
   frameImage?: string;
   frameDesc?: string;
-  onEditFrame?: () => void;
+  onEditFrame: () => void;
 }
 
 /**
@@ -104,7 +104,7 @@ export default function Card({id, frameNumber, frameImage, frameDesc, onEditFram
                 <Skeleton variant="rectangular" width="100%" height="100%" animation={false}/>
               )}
               {frameImage && (
-                1
+                1 // TODO – Add an IMG tag here...
               )}
             </Box>
 

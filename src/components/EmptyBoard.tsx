@@ -22,6 +22,7 @@ export default function EmptyBoard({onAddFrame}: IEmptyBoardProps) {
           textAlign: "center", 
           color: "rgba(0,0,0,0.54)",
           marginTop: "100px",
+          marginBottom: "150px",
         }}
       >
         <HistoryEduIcon style={{ fontSize: "76px" }}/>

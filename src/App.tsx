@@ -36,13 +36,16 @@ import NavBar from './components/NavBar';
 import AboutPage from './AboutPage';
 import HomePage from './HomePage';
 import EditFramePage from './EditFramePage';
+import Footer from './components/Footer';
+
+
+const newFrameId = () => uuidv4().split("-")[0];
 
 
 interface IFrameData {
   id: string;
   frameNumber: number;
 }
-
 
 function RedirectHomePage() {
   const navigate = useNavigate();
@@ -57,7 +60,8 @@ export default function App() {
   const _data = new Array(10)
     .fill(null)
     .map((_, i) => ({
-      id: uuidv4(),
+      id: newFrameId(),
+      frameNumber: i,
     }));
   const [data, setData] = useState(_data as IFrameData[]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -70,6 +74,9 @@ export default function App() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const navigate = useNavigate();
+
   return (
     <>
       <DndContext
@@ -90,7 +97,7 @@ export default function App() {
             
             newData.splice(i, 1);
             
-            return setData(newData);
+            return setData(newData.map((d, i) => ({...d, frameNumber: i})));
           }
 
           // If new location, move the item
@@ -99,7 +106,7 @@ export default function App() {
           const i = data.findIndex(d => d.id === active.id);
           const j = data.findIndex(d => d.id === over.id);
 
-          setData(arrayMove(data, i, j));
+          setData(arrayMove(data, i, j).map((d, i) => ({...d, frameNumber: i})));
         }}
         onDragStart={({active}) => setActiveId(active.id.toString())}
       >
@@ -107,9 +114,7 @@ export default function App() {
           <NavBar />
           <Container maxWidth="lg">
             <Routes>
-              <Route 
-                path="/"
-                element={
+              <Route path="/" element={
                   <HomePage 
                     data={data}
                     activeId={activeId}
@@ -117,21 +122,26 @@ export default function App() {
                       setData([
                         ...JSON.parse(JSON.stringify(data)),
                         {
-                          id: uuidv4(),
+                          id: newFrameId(),
                           frameNumber: data.length,
                         },
                       ]as IFrameData[]);
                     }}
-                    onExportBoard={() => console.log("Exporting...")}
+                    onExportBoard={() => console.log("Exporting...")} // TODO – Change me...
                     onClearBoard={() => setData([] as IFrameData[])}
                   />
-                } 
-              />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/edit/:frameId" element={<EditFramePage />} />
+              }/>
+              <Route path="/edit/:frameId" element={
+                <EditFramePage 
+                  getFrameData={(id: string) => data.find(d => d.id === id)}
+                  onGoBack={() => navigate("/")}
+                />
+              }/>
+              <Route path="/about" element={<AboutPage />}/>
               <Route path="*" element={<RedirectHomePage />} />
             </Routes>
           </Container>
+          <Footer />
         </div>
       </DndContext>
     </>

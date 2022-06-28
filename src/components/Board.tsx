@@ -18,6 +18,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useNavigate } from 'react-router-dom';
 
 import TrashDrop from './TrashDrop';
 import EmptyBoard from './EmptyBoard';
@@ -41,7 +42,9 @@ export default function Board({data, activeId, onAddFrame}: IBoardProps) {
   if (data.length === 0) return <EmptyBoard onAddFrame={onAddFrame}/>;
 
   // TODO: Pass this to <CardHover />
-  const activeFrame = data.find(frame => frame.id === activeId);
+  // const activeFrame = data.find(frame => frame.id === activeId);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -54,7 +57,8 @@ export default function Board({data, activeId, onAddFrame}: IBoardProps) {
             <Card
               key={i}
               id={d.id}
-              frameNumber={i}
+              frameNumber={d.frameNumber}
+              onEditFrame={() => navigate(`/edit/${d.id}`)}
             />
           ))}
         </Grid>
